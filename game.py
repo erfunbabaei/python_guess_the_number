@@ -27,7 +27,7 @@ def choose_difficulty():
 
 
 # Main game loop
-print(Fore.CYAN + "🎉 Welcome to the Random Number Game 🎉")
+print(Fore.CYAN + "🎉 Welcome to the Guess The Number Game 🎉")
 print(Fore.MAGENTA + "-" * 50)
 
 while True:
