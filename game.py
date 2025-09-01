@@ -1,76 +1,78 @@
+# Guess the Number Game 🎮
 import random
-from colorama import Fore, Style
+from colorama import Fore, Style, init
 
-print(Fore.CYAN + "Welcome to random number Game" + Style.RESET_ALL)
+# Initialize colorama
+init(autoreset=True)
+
+
+# Function to show game over message
+def game_over(correct_number):
+    print(Fore.RED + f"\n💀 Game Over! The correct number was {correct_number} 💀\n")
+
+
+# Function to choose difficulty level
+def choose_difficulty():
+    while True:
+        difficulty = input(
+            Fore.YELLOW + "Choose a difficulty level (easy/e, normal/n, hard/h): " + Style.RESET_ALL).lower()
+        if difficulty in ("easy", "e"):
+            return 10
+        elif difficulty in ("normal", "n"):
+            return 6
+        elif difficulty in ("hard", "h"):
+            return 3
+        else:
+            print(Fore.RED + "<< Invalid difficulty! Please try again >>")
+
+
+# Main game loop
+print(Fore.CYAN + "🎉 Welcome to the Random Number Game 🎉")
+print(Fore.MAGENTA + "-" * 50)
 
 while True:
+    random_number = random.randint(1, 100)
+    health = choose_difficulty()
 
-    randomNumber = random.randint(1, 100)
-
-    health: int = 0
-
-    def gameOver():
-        print(Fore.GREEN + f"Game Over, The correct number is {randomNumber}" + Style.RESET_ALL)
-
-    difficulty: str = str(input(Fore.YELLOW + "Choose a difficulty level( easy , normal , hard ): " + Style.RESET_ALL))
-
-    if difficulty == "easy":
-        health = 10
-    elif difficulty == "e":
-        health = 10
-    elif difficulty == "normal":
-        health = 6
-    elif difficulty == "n":
-        health = 6
-    elif difficulty == "hard":
-        health = 3
-    elif difficulty == "h":
-        health = 3
-    else:
-        print(Fore.RED + "<<Invalid difficulty>>" + Style.RESET_ALL)
-        continue
-
+    # Inner loop for guessing
     while health > 0:
+        print(Fore.BLUE + f"❤️ Your health: {health}")
 
-        print(Fore.BLUE + f"Your health is: {health}" + Style.RESET_ALL)
-
+        # Get user input
         try:
-            playerNumber:int = int(input(Fore.YELLOW + "Enter a number between 1 and 100: " + Style.RESET_ALL))
+            player_number = int(input(Fore.YELLOW + "Enter a number between 1 and 100: " + Style.RESET_ALL))
         except ValueError:
-            print(Fore.RED + "<<Invalid input! Please enter a number.>>" + Style.RESET_ALL)
+            print(Fore.RED + "<< Invalid input! Please enter a valid number. >>")
             continue
 
-        if playerNumber > 100 or playerNumber < 1:
-            print(Fore.RED + "<<Your number must be between 1 and 100>>" + Style.RESET_ALL)
+        # Check number range
+        if not 1 <= player_number <= 100:
+            print(Fore.RED + "<< Your number must be between 1 and 100! >>")
             continue
 
+        # Check guess
+        if player_number == random_number:
+            print(Fore.GREEN + "\n🏆 Winner Winner Chicken Dinner! 🏆\n")
+            break
+        elif player_number < random_number:
+            health -= 1
+            print(Fore.CYAN + "Try a larger number!\n" + Style.RESET_ALL)
         else:
+            health -= 1
+            print(Fore.CYAN + "Try a smaller number!\n" + Style.RESET_ALL)
 
-            if playerNumber == randomNumber:
-                print(Fore.CYAN + "winner winner chicken dinner!" + Style.RESET_ALL)
-                break
-            elif playerNumber < randomNumber:
-                health -= 1
-                if health == 0:
-                    gameOver()
-                    break
-                else:
-                    print(Fore.GREEN + "Try larger number!\n" + Style.RESET_ALL)
+        if health == 0:
+            game_over(random_number)
 
-            elif playerNumber > randomNumber:
-                health -= 1
-                if health == 0:
-                    gameOver()
-                    break
-                else:
-                    print(Fore.GREEN + "Try smaller number!\n" + Style.RESET_ALL)
+    # Ask to continue
+    while True:
+        continue_game = input(Fore.YELLOW + "Do you want to play again? (y/n): " + Style.RESET_ALL).lower()
 
-    continueGame: str = str(input(Fore.YELLOW + "Do you want to play again? (y/n): " + Style.RESET_ALL))
-
-    if continueGame == "y":
-        continue
-    elif continueGame == "n":
-        break
-    else:
-        print(Fore.RED + "<<Invalid input>>" + Style.RESET_ALL)
-        continue
+        if continue_game in ("y", "yes"):
+            break
+        elif continue_game in ("n", "no"):
+            print(Fore.MAGENTA + "\n👋 Thanks for playing! Goodbye!\n")
+            print(Fore.MAGENTA + "-" * 50)
+            exit()
+        else:
+            print(Fore.RED + "<< Invalid input! Please enter 'y' or 'n' >>")
